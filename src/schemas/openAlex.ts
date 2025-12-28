@@ -1,6 +1,8 @@
 export type PostSearch = {
 	searchString: string;
 	userEmail: string;
+	page: number;
+	pageSize: number;
 };
 
 export type OpenAlexSearch = PostSearch;
@@ -91,6 +93,7 @@ export type OpenAlexAPIReponseArticle = {
 };
 
 export type OpenAlexSearchOutput = {
+	totalResultsCount: number;
 	page: number;
 	userEmail: string;
 	results: OpenAlexArticle[];

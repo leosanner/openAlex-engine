@@ -16,7 +16,8 @@ export class OpenAlexAPI {
 		const params = new URLSearchParams({
 			filter: searchString,
 			sort: "fwci:desc",
-			"per-page": "100",
+			"per-page": String(searchObject.pageSize),
+			page: String(searchObject.page),
 		});
 
 		try {
@@ -31,6 +32,7 @@ export class OpenAlexAPI {
 
 			if (!data) {
 				return {
+					totalResultsCount: 0,
 					page: 0,
 					userEmail: searchObject.userEmail,
 					results: [],
@@ -52,6 +54,7 @@ export class OpenAlexAPI {
 				page: 1,
 				results: output,
 				userEmail: "email@example.com",
+				totalResultsCount: data.meta.count,
 			};
 		} catch (err) {
 			console.error(`Erro na execução: ${err}`);
@@ -59,6 +62,7 @@ export class OpenAlexAPI {
 				page: 0,
 				userEmail: searchObject.userEmail,
 				results: [],
+				totalResultsCount: 0,
 			};
 		}
 	}
