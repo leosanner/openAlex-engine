@@ -26,6 +26,7 @@ export async function formSearchOpenAlex(
 	const currentPage = formData.get("page") as string;
 	const pageSize = formData.get("pageSize") as string;
 	const orderBy = formData.get("orderBy") as string;
+	const orderByDirection = formData.get("orderByDirection") as string;
 	const userEmail = formData.get("userEmail") as string;
 	const searchString = formData.get("searchString") as string;
 
@@ -41,6 +42,8 @@ export async function formSearchOpenAlex(
 		userEmail: userEmail,
 		page: Number(currentPage),
 		pageSize: Number(pageSize),
+		orderBy: orderBy,
+		orderByDirection: orderByDirection,
 	});
 
 	return {

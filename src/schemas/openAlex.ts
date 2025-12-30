@@ -3,11 +3,14 @@ export type PostSearch = {
 	userEmail: string;
 	page: number;
 	pageSize: number;
+	orderBy: string;
+	orderByDirection: string;
 };
 
 export type OpenAlexSearch = PostSearch;
 
 export type OpenAlexArticle = {
+	id: string;
 	title: string;
 	abstract: string;
 	keywords: string[];

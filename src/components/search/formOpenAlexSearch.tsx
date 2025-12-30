@@ -5,28 +5,45 @@ import clsx from "clsx";
 import { useActionState, useEffect, useState } from "react";
 import LoadingSpinner from "../commom/loadingSpinner";
 import TableObject from "../commom/tableObject";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, Search } from "lucide-react";
 
-const buttonStyle =
-	"p-1 rounded-xl cursor-pointer hover:bg-gray-200 disabled:cursor-not-allowed";
+const buttonStyle = clsx(
+	"p-1 rounded-xl",
+	"cursor-pointer hover:bg-gray-200",
+	"disabled:cursor-not-allowed"
+);
 const labelCSS = clsx("text-2xl");
 const inputCSS = clsx(
-	"w-full px-4 py-2 border-2 border-gray-300 rounded-md outline-none transition-colors focus:border-gray-900"
+	"w-full px-4 py-2 border-2",
+	"border-gray-300 rounded-md outline-none transition-colors",
+	"focus:border-gray-900"
 );
 
 export function OpenAlexForm() {
+	// Consts
 	const initialPageSize = 10;
-	const availableOrderBy = ["fwci", "cited_by_count"];
+	const availableOrderBy = ["fwci"];
+	const orderByDirections = [
+		["asc", "crescente"],
+		["desc", "decrescente"],
+	];
 	const availablePageSize = [initialPageSize, 15, 20, 25, 50, 100];
 	const defaultOrderBy = availableOrderBy[0];
 	const formId = "articleFormId";
 
+	// Default form values
 	const [state, formAction, isPending] = useActionState(formSearchOpenAlex, {
 		data: { page: 0, results: [], userEmail: "", totalResultsCount: 0 },
 		error: null,
 	});
+
+	// States
 	const [currentPage, setPage] = useState(1);
 	const [pageSize, setPageSize] = useState(initialPageSize);
+	const [userEmail, setUserEmail] = useState("email@exemplo.com");
+	const [searchString, setSearchString] = useState(
+		"machine learning#iot%impact assessment#cummlative impacts"
+	);
 
 	const resultsLength = state.data.totalResultsCount;
 	const lastPage = resultsLength > 0 ? Math.ceil(resultsLength / pageSize) : 1;
@@ -48,33 +65,50 @@ export function OpenAlexForm() {
 					<label htmlFor="search_string" className={labelCSS}>
 						<h2 className="font-bold">Insira sua string de busca</h2>
 						<input
+							onChange={(e) => setSearchString(e.target.value)}
+							value={searchString}
 							type="text"
 							name="searchString"
 							id="search_string"
 							placeholder="Ex: machine learning#iot%impact assessment#cummlative impacts"
-							defaultValue="machine learning#iot%impact assessment#cummlative impacts"
 							className={inputCSS}
 						/>
 					</label>
 					<label htmlFor="user_email" className={labelCSS}>
 						<h2 className="font-bold">Insira seu email</h2>
 						<input
+							onChange={(e) => {
+								setUserEmail(e.target.value);
+							}}
+							value={userEmail}
 							type="email"
 							name="userEmail"
 							id="user_email"
-							placeholder="email@exemplo.com"
-							defaultValue="email@exemplo.com"
+							placeholder="ex: email@exemplo.com"
 							className={inputCSS}
 						/>
 					</label>
 
-					<label htmlFor="order_by" className={labelCSS}>
+					<label htmlFor="order_by" className={`${labelCSS} flex gap-x-5`}>
+						<h2 className="font-bold">Ordenar por: </h2>
 						<select name="orderBy" id="order_by" defaultValue={defaultOrderBy}>
-							<option value="">Ordenar por</option>
 							{availableOrderBy.map((option, index) => {
 								return (
 									<option key={index} value={option}>
 										{option}
+									</option>
+								);
+							})}
+						</select>
+						<select
+							name="orderByDirection"
+							id="order_by"
+							defaultValue={defaultOrderBy}
+						>
+							{orderByDirections.map((option, index) => {
+								return (
+									<option key={index} value={option[0]}>
+										{option[1]}
 									</option>
 								);
 							})}
@@ -84,7 +118,7 @@ export function OpenAlexForm() {
 					<input type="hidden" name="pageSize" value={pageSize} />
 					<input type="hidden" name="page" value={currentPage} />
 					<button
-						className="text-2xl bg-gray-800 text-white font-bold w-1/3 rounded-1xl p-1"
+						className="text-2xl border-2 border-black cursor-pointer bg-green-900 text-white font-bold rounded-1xl p-1 hover:bg-green-900/90 max-w-40"
 						type="submit"
 					>
 						{isPending ? (
@@ -92,12 +126,14 @@ export function OpenAlexForm() {
 								Carregando <LoadingSpinner />
 							</>
 						) : (
-							"Enviar"
+							<div className="flex items-center justify-between mx-2">
+								<span>Buscar</span> <Search />
+							</div>
 						)}
 					</button>
 				</form>
 			</div>
-			<div className="my-5 w-2/3 bg px-3">
+			<div className="my-5 w-full bg px-30">
 				{state.data.results.length > 0 && <TableObject articles={state.data} />}
 				<div className="flex justify-between">
 					<div className="m-2">
@@ -115,9 +151,8 @@ export function OpenAlexForm() {
 					<div className="flex gap-x-4 my-2">
 						<button
 							onClick={() => {
-								currentPage === 1 ? setPage(2) : setPage(currentPage - 1);
+								currentPage === 1 ? setPage(1) : setPage(currentPage - 1);
 							}}
-							disabled={currentPage === 1}
 							type="submit"
 							form={formId}
 							className={buttonStyle}
@@ -130,7 +165,6 @@ export function OpenAlexForm() {
 									? setPage(lastPage)
 									: setPage(currentPage + 1);
 							}}
-							disabled={currentPage === lastPage}
 							type="submit"
 							form={formId}
 							className={buttonStyle}
@@ -147,7 +181,9 @@ export function OpenAlexForm() {
 						>
 							Última página ({lastPage})
 						</button>
-						<span className="m-2">Página Atual: {currentPage}</span>
+						<span className="m-2">
+							Página {currentPage} de {lastPage}
+						</span>
 					</div>
 				</div>
 			</div>

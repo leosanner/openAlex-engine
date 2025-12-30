@@ -1,4 +1,3 @@
-import { DisplayArticleInformation } from "@/components/search/displayArticleInformation";
 import { OpenAlexForm } from "@/components/search/formOpenAlexSearch";
 import { OpenAlexSearchOutput } from "@/schemas/openAlex";
 

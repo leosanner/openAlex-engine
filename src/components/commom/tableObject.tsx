@@ -1,12 +1,13 @@
 import { OpenAlexSearchOutput } from "@/schemas/openAlex";
 import clsx from "clsx";
+import Link from "next/link";
 
 type TableObjectType = {
 	articles: OpenAlexSearchOutput;
 };
 
 export default function TableObject({ articles }: TableObjectType) {
-	const tableColumns = Object.keys(articles.results[0]);
+	const tableColumns = Object.keys(articles.results[0]).slice(1);
 	const tableDataStyle = clsx("p-2", "max-h-50");
 
 	return (
@@ -31,16 +32,15 @@ export default function TableObject({ articles }: TableObjectType) {
 								className="divide-y divide-grey-100 divide-x"
 							>
 								<td className={tableDataStyle}>
-									<div className="overflow-y-auto max-h-50">
-										{articleRow.title}
+									<div className="overflow-y-auto max-h-50 hover:text-green-900">
+										<Link href={articleRow.id}>{articleRow.title}</Link>
 									</div>
 								</td>
 								<td className={tableDataStyle}>
-									<div className="overflow-y-auto max-h-50">
+									<div className="overflow-y-auto max-h-50 max-w-300">
 										{articleRow.abstract}
 									</div>
 								</td>
-								<td className={tableDataStyle}>{articleRow.fwci}</td>
 								<td className={tableDataStyle}>
 									<div className="flex flex-col gap-2 items-start overflow-x-auto whitespace-nowrap max-h-50 pb-2">
 										{articleRow.keywords.map((kw, i) => (
@@ -53,6 +53,7 @@ export default function TableObject({ articles }: TableObjectType) {
 										))}
 									</div>
 								</td>
+								<td className={tableDataStyle}>{articleRow.fwci}</td>
 							</tr>
 						);
 					})}

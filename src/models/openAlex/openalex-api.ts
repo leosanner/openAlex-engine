@@ -13,11 +13,15 @@ export class OpenAlexAPI {
 		searchObject: OpenAlexSearch
 	): Promise<OpenAlexSearchOutput> {
 		const searchString = buildSearchQueryOpenAlex(searchObject.searchString);
+		const orderDirection =
+			searchObject.orderByDirection === "desc" ? ":desc" : "";
+
 		const params = new URLSearchParams({
 			filter: searchString,
-			sort: "fwci:desc",
+			sort: `${searchObject.orderBy}${orderDirection}`,
 			"per-page": String(searchObject.pageSize),
 			page: String(searchObject.page),
+			mailto: searchObject.userEmail,
 		});
 
 		try {
@@ -41,12 +45,13 @@ export class OpenAlexAPI {
 			const results = data.results;
 			const output: OpenAlexArticle[] = results.map((result) => {
 				return {
+					id: result.id,
 					title: result.title,
 					abstract: result.abstract_inverted_index
 						? invertedIndexToAbstract(result.abstract_inverted_index)
-						: "not founded",
-					fwci: result.fwci,
+						: "Não consta na base de dados.",
 					keywords: result.keywords.map((kw) => kw.display_name),
+					fwci: result.fwci === null ? 0 : result.fwci,
 				};
 			});
 
