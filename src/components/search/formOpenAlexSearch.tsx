@@ -24,8 +24,8 @@ export function OpenAlexForm() {
 	const initialPageSize = 10;
 	const availableOrderBy = ["fwci"];
 	const orderByDirections = [
-		["asc", "crescente"],
 		["desc", "decrescente"],
+		["asc", "crescente"],
 	];
 	const availablePageSize = [initialPageSize, 15, 20, 25, 50, 100];
 	const defaultOrderBy = availableOrderBy[0];
@@ -43,6 +43,9 @@ export function OpenAlexForm() {
 	const [userEmail, setUserEmail] = useState("email@exemplo.com");
 	const [searchString, setSearchString] = useState(
 		"machine learning#iot%impact assessment#cummlative impacts"
+	);
+	const [orderByDirectionState, setOrderByDirectionState] = useState(
+		orderByDirections[0][0]
 	);
 
 	const resultsLength = state.data.totalResultsCount;
@@ -103,7 +106,11 @@ export function OpenAlexForm() {
 						<select
 							name="orderByDirection"
 							id="order_by"
-							defaultValue={defaultOrderBy}
+							value={orderByDirectionState}
+							onChange={(e) => {
+								e.preventDefault();
+								setOrderByDirectionState(e.target.value);
+							}}
 						>
 							{orderByDirections.map((option, index) => {
 								return (

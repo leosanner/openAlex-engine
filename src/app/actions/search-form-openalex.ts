@@ -3,7 +3,12 @@
 import { OpenAlexSearch, OpenAlexSearchOutput } from "@/schemas/openAlex";
 
 async function searchAPI(object: OpenAlexSearch) {
-	const response = await fetch("http://localhost:3000/api/v1/search", {
+	const apiUrl =
+		process.env.NODE_ENV === "production"
+			? process.env.PRODUCTION_URL
+			: "http://localhost:3000";
+
+	const response = await fetch(`${apiUrl}"/api/v1/search"`, {
 		method: "POST",
 		body: JSON.stringify(object),
 	});
