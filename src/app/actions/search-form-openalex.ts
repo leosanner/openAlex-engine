@@ -8,14 +8,10 @@ async function searchAPI(object: OpenAlexSearch) {
 			? process.env.PRODUCTION_URL
 			: "http://localhost:3000";
 
-	console.log(`API REQUEST URL: ${apiUrl}/api/v1/search`);
-
 	const response = await fetch(`${apiUrl}/api/v1/search`, {
 		method: "POST",
 		body: JSON.stringify(object),
 	});
-
-	console.log(`API RESPONSE: ${response}`);
 
 	const responseBody = (await response.json()) as OpenAlexSearchOutput;
 	return responseBody;

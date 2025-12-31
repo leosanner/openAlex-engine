@@ -59,7 +59,7 @@ export function OpenAlexForm() {
 
 	return (
 		<>
-			<div className="bg-grey-300 w-2/3 flex justify-around">
+			<div className="bg-grey-300 w-full flex justify-around">
 				<form
 					id={formId}
 					className="flex flex-col gap-3 w-2/3"
@@ -140,7 +140,7 @@ export function OpenAlexForm() {
 					</button>
 				</form>
 			</div>
-			<div className="my-5 w-full bg px-30">
+			<div className="my-5 w-full bg">
 				{state.data.results.length > 0 && <TableObject articles={state.data} />}
 				<div className="flex justify-between">
 					<div className="m-2">
