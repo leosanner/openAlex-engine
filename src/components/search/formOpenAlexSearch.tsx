@@ -20,17 +20,24 @@ const buttonStyle = clsx(
 	"flex items-center justify-center p-2 border border-slate-300 bg-white text-slate-600 hover:bg-slate-100 transition-colors disabled:opacity-40"
 );
 
-export function OpenAlexForm() {
-	const initialPageSize = 10;
-	const availableOrderBy = ["fwci"];
-	const orderByDirections = [
-		["desc", "decrescente"],
-		["asc", "crescente"],
-	];
-	const availablePageSize = [initialPageSize, 15, 20, 25, 50, 100];
-	const defaultOrderBy = availableOrderBy[0];
-	const formId = "articleFormId";
+const initialPageSize = 10;
+const availableOrderBy = ["fwci"];
+const orderByDirections = [
+	["desc", "decrescente"],
+	["asc", "crescente"],
+];
+const availablePageSize = [initialPageSize, 15, 20, 25, 50, 100];
+const defaultOrderBy = availableOrderBy[0];
+const formId = "articleFormId";
 
+const searchInOptions = {
+	title_and_abstract: "Título e resumo",
+	title: "Apenas título",
+	full_text: "Texto todo",
+	abstract: "Apenas Resumo",
+};
+
+export function OpenAlexForm() {
 	const [state, formAction, isPending] = useActionState(formSearchOpenAlex, {
 		data: { page: 0, results: [], userEmail: "", totalResultsCount: 0 },
 		error: null,
@@ -40,12 +47,12 @@ export function OpenAlexForm() {
 	const [pageSize, setPageSize] = useState(initialPageSize);
 	const [userEmail, setUserEmail] = useState("email@exemplo.com");
 	const [searchString, setSearchString] = useState(
-		"machine learning#iot%impact assessment#cummlative impacts"
+		'("machine learning" OR "deep learning") AND ("environment impact assessment" OR "eia")'
 	);
 	const [orderByDirectionState, setOrderByDirectionState] = useState(
 		orderByDirections[0][0]
 	);
-
+	const [searchIn, setSearchIn] = useState("title_and_abstract");
 	const resultsLength = state.data.totalResultsCount;
 	const lastPage = resultsLength > 0 ? Math.ceil(resultsLength / pageSize) : 1;
 
@@ -135,6 +142,23 @@ export function OpenAlexForm() {
 											{opt[1]}
 										</option>
 									))}
+								</select>
+							</div>
+							<div>
+								<label className={labelCSS}>Buscar em</label>
+								<select
+									name="searchInFilter"
+									className={selectCSS}
+									value={searchIn}
+									onChange={(e) => setSearchIn(e.target.value)}
+								>
+									{Object.entries(searchInOptions).map((opt, index) => {
+										return (
+											<option key={index} value={opt[0]}>
+												{opt[1]}
+											</option>
+										);
+									})}
 								</select>
 							</div>
 						</div>

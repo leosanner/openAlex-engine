@@ -2,7 +2,7 @@
 
 import { OpenAlexSearch, OpenAlexSearchOutput } from "@/schemas/openAlex";
 
-async function searchAPI(object: OpenAlexSearch) {
+async function openAlexSearchRequest(object: OpenAlexSearch) {
 	const apiUrl =
 		process.env.NODE_ENV === "production"
 			? process.env.PRODUCTION_URL
@@ -34,6 +34,7 @@ export async function formSearchOpenAlex(
 	const orderByDirection = formData.get("orderByDirection") as string;
 	const userEmail = formData.get("userEmail") as string;
 	const searchString = formData.get("searchString") as string;
+	const searchInFilter = formData.get("searchInFilter") as string;
 
 	if (!userEmail || !searchString || !pageSize || !currentPage) {
 		return {
@@ -42,13 +43,14 @@ export async function formSearchOpenAlex(
 		};
 	}
 
-	const apiResponseContent = await searchAPI({
+	const apiResponseContent = await openAlexSearchRequest({
 		searchString: searchString,
 		userEmail: userEmail,
 		page: Number(currentPage),
 		pageSize: Number(pageSize),
 		orderBy: orderBy,
 		orderByDirection: orderByDirection,
+		searchFilter: searchInFilter,
 	});
 
 	return {

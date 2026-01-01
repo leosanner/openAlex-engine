@@ -5,6 +5,7 @@ export type PostSearch = {
 	pageSize: number;
 	orderBy: string;
 	orderByDirection: string;
+	searchFilter?: string;
 };
 
 export type OpenAlexSearch = PostSearch;

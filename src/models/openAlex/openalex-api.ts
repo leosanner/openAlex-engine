@@ -8,11 +8,18 @@ import {
 import { openAlexWorks } from "./openalex-routes";
 import { buildSearchQueryOpenAlex, invertedIndexToAbstract } from "./utils";
 
+// ("machine learning" OR "deep learning") AND ("enviroment impact assessment" OR "eia")
+
 export class OpenAlexAPI {
 	async searchWorksByCompleteString(
 		searchObject: OpenAlexSearch
 	): Promise<OpenAlexSearchOutput> {
-		const searchString = buildSearchQueryOpenAlex(searchObject.searchString);
+		const searchFilter = searchObject.searchFilter
+			? searchObject.searchFilter
+			: "title_and_abstract";
+
+		const searchString = `${searchFilter}.search:${searchObject.searchString}`;
+
 		const orderDirection =
 			searchObject.orderByDirection === "desc" ? ":desc" : "";
 
@@ -23,6 +30,8 @@ export class OpenAlexAPI {
 			page: String(searchObject.page),
 			mailto: searchObject.userEmail,
 		});
+
+		console.log("URl do request: " + `${openAlexWorks}?${params}`);
 
 		try {
 			const response = await fetch(`${openAlexWorks}?${params}`, {
