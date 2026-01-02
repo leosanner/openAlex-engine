@@ -173,8 +173,8 @@ export default async function SearchPage() {
 						</h2>
 					</div>
 
-					<div className="bg-white rounded-[2rem] border border-slate-200 shadow-[0_20px_50px_rgba(0,0,0,0.05)] overflow-hidden min-h-[500px]">
-						<div className="h-2 w-full bg-gradient-to-r from-[#008542] via-[#FFD100] to-[#008542]"></div>
+					<div className="bg-white rounded-4xl border border-slate-200 shadow-[0_20px_50px_rgba(0,0,0,0.05)] overflow-hidden min-h-125">
+						<div className="h-2 w-full bg-linear-to-r from-[#008542] via-[#FFD100] to-[#008542]"></div>
 						<div className="p-8 md:p-14">
 							<OpenAlexForm />
 						</div>

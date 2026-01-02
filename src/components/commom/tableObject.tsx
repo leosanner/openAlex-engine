@@ -13,7 +13,7 @@ export default function TableObject({ articles }: TableObjectType) {
 
 	return (
 		<div className="w-full border border-slate-300 bg-white shadow-md overflow-hidden">
-			<div className="overflow-y-auto max-h-[650px] scrollbar-thin scrollbar-thumb-slate-300">
+			<div className="overflow-y-auto max-h-162.5 scrollbar-thin scrollbar-thumb-slate-300">
 				<table className="w-full table-fixed border-collapse">
 					<thead className="sticky top-0 z-20 shadow-sm">
 						<tr className="bg-[#003865] border-b border-slate-300 text-white">
